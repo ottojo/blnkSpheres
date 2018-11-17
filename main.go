@@ -5,25 +5,25 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/lucasb-eyer/go-colorful"
 	"github.com/ottojo/blnk2"
 	"github.com/ottojo/blnk2/vector"
+	"log"
 	"math"
 	"math/rand"
 	"time"
 )
 
 var filename = flag.String("c", "/home/jonas/clients.json", "blnk System config file")
-var framesPerSecond = flag.Float64("fps", 20, "Framerate")
-var rate = flag.Float64("expansionRate", 1, "sphere radius expansion in m/s")
+var framesPerSecond = flag.Float64("fps", 30, "Framerate")
+var rate = flag.Float64("expansionRate", 5, "sphere radius expansion in m/s")
 
 func main() {
 	flag.Parse()
 	system := blnk2.CreateFromFile(*filename)
 	go system.Discovery()
 	system.WaitForDiscovery()
-	fmt.Println("Clients connected")
+	log	.Println("Clients connected")
 
 	var maxLedDistance float64 = 0
 	ledCount := 0
@@ -38,7 +38,7 @@ func main() {
 		sphereOrigin := randVector(maxLedDistance)
 		coloredLeds := 0
 		radius := 0.0
-		sphereColor := colorful.HappyColor()
+		sphereColor := colorful.Hcl(rand.Float64()*360.0, rand.Float64(), 0.6+rand.Float64()*0.4)
 		for coloredLeds < ledCount {
 			coloredLeds = 0
 			for pixel := system.Stage.First; pixel != nil; pixel = pixel.Next {
